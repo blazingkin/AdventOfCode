@@ -1,0 +1,20 @@
+import FileSystem
+instructions = open("input").read_lines().map(x -> x.split_on_token(" "))
+x = 0
+y = 0
+aim = 0
+for i = 0; i < instructions.size(); i++
+    instr = instructions[i]
+    amount = instr[1].to_number()
+    if instr[0] == "up"
+        aim = aim - amount
+    else if instr[0] == "down"
+        aim = aim + amount
+    else if instr[0] == "forward"
+        x = x + amount
+        y = y + (aim * amount)
+    end
+end
+print(x)
+print(y)
+print(x * y)
