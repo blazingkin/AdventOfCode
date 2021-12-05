@@ -1,0 +1,80 @@
+import FileSystem
+import Lists
+
+lines = open("input").read_lines()
+lines.map!(l -> l.replace("->", ",").replace(" ", "").split_on_token(","))
+
+max_x = 0
+max_y = 0
+
+arena = []
+constructor Line(points)
+    points.map!(x -> x.to_number())
+    x_1 = points[0]
+    y_1 = points[1]
+    x_2 = points[2]
+    y_2 = points[3]
+
+    :horizontal_or_vertical
+        return (x_1 == x_2) || (y_1 == y_2)
+    end
+
+    :show
+        x_1 + "," + y_1 + " -> " + x_2 + "," + y_2
+    end
+
+    :find_bounds
+        max_x = max(max_x, max(x_1, x_2))
+        max_y = max(max_y, max(y_1, y_2))
+    end
+
+    :mark_points
+        if y_1 == y_2
+            start_x = min(x_1, x_2)
+            end_x   = max(x_1, x_2)
+            for x = start_x; x <= end_x; x++
+                arena[x][y_1] = arena[x][y_1] + 1
+            end
+        else
+            start_y = min(y_1, y_2)
+            end_y   = max(y_1, y_2)
+            for y = start_y; y <= end_y; y++
+                arena[x_1][y] = arena[x_1][y] + 1
+            end
+        end
+    end
+end
+
+print(lines)
+
+lines.map!(l -> Line(l))
+print(lines.size())
+lines.filter!(l -> l.horizontal_or_vertical())
+print(lines.size())
+lines.each(l -> l.find_bounds())
+
+print(lines)
+
+print(max_x)
+print(max_y)
+
+for x = 0; x <= max_x; x++
+    arena[x] = []
+    for y = 0; y <= max_y; y++
+        arena[x][y] = 0
+    end
+end
+
+lines.each(l -> l.mark_points())
+
+total = 0
+for x = 0; x < max_x; x++
+    for y = 0; y < max_y; y++
+        print_no_newline(arena[x][y] + " ")
+        if arena[x][y] > 1
+            total = total + 1
+        end
+    end
+    print("")
+end
+print(total)
