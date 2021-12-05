@@ -1,0 +1,32 @@
+import FileSystem
+data = open("input").read_lines()
+
+bits = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+for i = 0; i < data.size(); i++
+    for y = 0; y < 12; y++
+        if data[i][y] == "1"
+            bits[y] = bits[y] + 1
+        else
+            bits[y] = bits[y] - 1
+        end
+    end
+end
+
+gamma   = 0
+epsilon = 0
+
+for i = 0; i < 12; i++
+    gamma   = gamma   * 2
+    epsilon = epsilon * 2
+
+    if bits[i] > 0
+        gamma = gamma + 1
+    else
+        epsilon = epsilon + 1
+    end
+end
+print(bits)
+
+print(epsilon)
+print(gamma)
+print(epsilon * gamma)
